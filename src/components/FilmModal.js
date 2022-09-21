@@ -24,7 +24,7 @@ function FilmModal(props) {
                 return items
             } else {
                 // add
-                let index = Math.max(...prevState.map(x => x.id))
+                let index = prevState.reduce((prev, current) => { return prev.id > current.id ? prev : current }).id
                 let items = [...prevState]
                 let actors = Array.from(film.actors, actor => parseInt(actor))
                 let item = {...film, "id" : index + 1, "actors" : actors}
