@@ -4,18 +4,17 @@ import FilmModal from './FilmModal/FilmModal';
 
 function FilmItem(props) {
     const [isShowing, setShowing] = useState(false)
-    const [isLoading, setLoading] = useState(false)
 
     return (
         <div className='itemContainer'>
             <div className="leftContainer">
                 <div className="imgContainer">
-                    {isLoading ? <Skeleton/> : <img src={props.film.image} alt="" />}
+                    {props.isLoading ? <Skeleton/> : <img src={props.film.image} alt="" />}
                 </div>
                 <div className="itemDescription">
-                {isLoading ? <Skeleton/> : <h3 onClick={() => setShowing(!props.isShowing)}>{props.film.fname}</h3>}
-                    <FilmModal setShowing={setShowing} isShowing={isShowing} setFilmItems={props.setFilmItems} {...props} createFilm={props.createFilm} isLoading={isLoading} setLoading={setLoading}/>
-                    {isLoading ? <Skeleton/> : <p>{props.film.description}</p>}
+                {props.isLoading ? <Skeleton/> : <h3 onClick={() => setShowing(!props.isShowing)}>{props.film.fname}</h3>}
+                    <FilmModal setShowing={setShowing} isShowing={isShowing} setFilmItems={props.setFilmItems} {...props} createFilm={props.createFilm} isLoading={props.isLoading} setLoading={props.setLoading}/>
+                    {props.isLoading ? <Skeleton/> : <p>{props.film.description}</p>}
                 </div>
             </div>
             <div className='rightContainer'>

@@ -5,7 +5,7 @@ function FilmList(props) {
     return (
         <div>
             {props.filmItems && props.filmItems.map((item, index) => 
-            <FilmItem key={index} film={item} setFilmItems={props.setFilmItems} actorsList={props.actorsList} deleteItem={props.deleteItem} createFilm={props.createFilm}/>)}
+            <FilmItem key={index} film={item} setFilmItems={props.setFilmItems} actorsList={props.actorsList} deleteItem={props.deleteItem} createFilm={props.createFilm} isLoading={props.isLoading} setLoading={props.setLoading}/>)}
         </div>
     );
 }

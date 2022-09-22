@@ -2,7 +2,6 @@ import { useState } from 'react';
 import './App.css';
 import FilmList from './components/FilmList';
 import FilmModal from './components/FilmModal/FilmModal';
-import Skeleton from 'react-loading-skeleton';
 import { actors, films } from './resources';
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -10,6 +9,7 @@ function App() {
     // states
     const [isShowing, setShowing] = useState(false)
     const [filmItems, setFilmItems] = useState(films)
+    const [isLoading, setLoading] = useState(false)
 
     // deleteItem
     const deleteItem = (film_id) => {
@@ -51,8 +51,8 @@ function App() {
         <div>
             <h1>BoDien Cinema</h1>
             <button onClick={() => setShowing(!isShowing)}>Create Film</button>
-            <FilmList filmItems={filmItems} setFilmItems={setFilmItems} actorsList={actors} deleteItem={deleteItem} createFilm={createFilm}/>
-            <FilmModal setShowing={setShowing} isShowing={isShowing} actorsList={actors} filmItems={filmItems} setFilmItems={setFilmItems} createFilm={createFilm}/>
+            <FilmList filmItems={filmItems} setFilmItems={setFilmItems} actorsList={actors} deleteItem={deleteItem} createFilm={createFilm} isLoading={isLoading} setLoading={setLoading}/>
+            <FilmModal setShowing={setShowing} isShowing={isShowing} actorsList={actors} filmItems={filmItems} setFilmItems={setFilmItems} createFilm={createFilm} isLoading={isLoading} setLoading={setLoading}/>
         </div>
     );
 }
