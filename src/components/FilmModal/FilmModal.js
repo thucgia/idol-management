@@ -9,34 +9,21 @@ function FilmModal(props) {
 
     const [image, setImage] = useState(props.film ? film.image : null)
 
-    const validateSelect = () => {
-        return film.actors.length <= 2;
+    const collectData = (event) => {
+        if (event.target.name === "actors") {
+            let value = Array.from(event.target.selectedOptions, option => option.value)
+            setFilm({...film, [event.target.name] : value})
+        } else if (event.target.name === "image" && event.target.files && event.target.files[0]){
+            setImage(URL.createObjectURL(event.target.files[0]))
+            setFilm({...film, "image" : event.target.files[0]})
+        } else {
+            setFilm({...film, [event.target.name] : event.target.value})
+        }
     }
 
-    const createFilm = (image_url = false) => {
-        props.setFilmItems(prevState => {
-            // update
-            if (film.id) {
-                let index = prevState.findIndex(item => item.id === props.film.id)
-                let items = [...prevState]
-                let actors = Array.from(film.actors, actor => parseInt(actor))
-                
-                if (image_url) items[index] = {...film, "actors" : actors, "image" : image_url}
-                else items[index] = {...film, "actors" : actors}
-                return items
-            } else {
-                // create
-                let index = prevState.reduce((prev, current) => { return prev.id > current.id ? prev : current }).id
-                let items = [...prevState]
-                let actors = Array.from(film.actors, actor => parseInt(actor))
-                let item = {}
-                if (image_url) item = {...film, "id" : index + 1, "actors" : actors, "image" : image_url}
-                else item = { ...film, "id" : index + 1, "actors" : actors }
-                items.push(item)
-                console.log(items)
-                return items
-            }
-        })
+    // validateSelect (Actors)
+    const validateSelect = () => {
+        return film.actors.length <= 2;
     }
 
     const save = (event) => {
@@ -51,28 +38,19 @@ function FilmModal(props) {
             const data = new FormData()
             data.append("source", film.image)
             data.append("format", "json")
+            props.setLoading(true)
             axios.post(url, data)
             .then(res => {
-                createFilm(res.data.image.display_url)
-                props.setShowing(() => !props.isShowing)
+                props.createFilm(film, res.data.image.display_url)
+                props.setLoading(false)
             })
             .catch(err => { throw err })
         } else {
-            createFilm()
-            props.setShowing(() => !props.isShowing)
+            props.createFilm(film)
         }
+        props.setShowing(() => !props.isShowing)
     }
-    const collectData = (event) => {
-        if (event.target.name === "actors") {
-            let value = Array.from(event.target.selectedOptions, option => option.value)
-            setFilm({...film, [event.target.name] : value})
-        } else if (event.target.name === "image" && event.target.files && event.target.files[0]){
-            setImage(URL.createObjectURL(event.target.files[0]))
-            setFilm({...film, "image" : event.target.files[0]})
-        } else {
-            setFilm({...film, [event.target.name] : event.target.value})
-        }
-    }
+
     return (
         <div>
             {props.isShowing ? 

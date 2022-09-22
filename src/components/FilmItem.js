@@ -1,26 +1,21 @@
 import React, { useState } from 'react';
-import FilmModal from './FilmModal';
+import Skeleton from 'react-loading-skeleton';
+import FilmModal from './FilmModal/FilmModal';
 
 function FilmItem(props) {
     const [isShowing, setShowing] = useState(false)
-    const deleteItem = () => {
-        props.setFilmItems((prevState) => {
-            const itemIndex = prevState.findIndex(item => item.id === props.film.id)
-            let items = [...prevState]
-            items.splice(itemIndex, 1)
-            return items
-        })
-    }
+    const [isLoading, setLoading] = useState(false)
+
     return (
         <div className='itemContainer'>
             <div className="leftContainer">
                 <div className="imgContainer">
-                    <img src={props.film.image} alt="" />
+                    {isLoading ? <Skeleton/> : <img src={props.film.image} alt="" />}
                 </div>
                 <div className="itemDescription">
-                    <h3 onClick={() => setShowing(!props.isShowing)}>{props.film.fname}</h3>
-                    <FilmModal setShowing={setShowing} isShowing={isShowing} setFilmItems={props.setFilmItems} {...props}/>
-                    <p>{props.film.description}</p>
+                {isLoading ? <Skeleton/> : <h3 onClick={() => setShowing(!props.isShowing)}>{props.film.fname}</h3>}
+                    <FilmModal setShowing={setShowing} isShowing={isShowing} setFilmItems={props.setFilmItems} {...props} createFilm={props.createFilm} isLoading={isLoading} setLoading={setLoading}/>
+                    {isLoading ? <Skeleton/> : <p>{props.film.description}</p>}
                 </div>
             </div>
             <div className='rightContainer'>
@@ -32,7 +27,7 @@ function FilmItem(props) {
                         </div>
                     </div>
                 )}
-                
+
                 {props.film.actors.length < 2 ? 
                     <div className='itemActor'>
                         <div className="imgActor">
@@ -53,7 +48,7 @@ function FilmItem(props) {
                     })
                 }}
                 ></div>
-                <div className='deleteIcon' onClick={deleteItem}></div>
+                <div className='deleteIcon' onClick={() => props.deleteItem(props.film.id)}></div>
             </div>
         </div>
     );
